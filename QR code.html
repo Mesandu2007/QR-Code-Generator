@@ -1,0 +1,167 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+        <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+        <style>
+            body{
+                font-family: sans-serif;
+            }
+            .container{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap:20px;
+
+            }
+            .head{
+                font-size: 30px;
+                color:blue;
+            }
+            .card1{
+                background-color: white;
+                border-radius: 8px;
+                max-width: 600px;
+                width: 100%;
+                height:auto;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+                padding: 20px;
+            }
+            .card2{
+                background-color: white;
+                border-radius: 8px;
+                max-width: 600px;
+                width: 100%;
+                height:auto;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+                padding: 20px;
+            }
+            .horiz{
+                display: flex;
+                width: 100%;
+                justify-content: center;
+                align-items: center;
+                gap:15px;
+
+            }
+            .input1{
+                flex:1;
+                width: 50%;
+                height: 35px;
+                border-radius: 5px;
+                border:1px solid gray;
+            }
+            .input1:focus{
+                border:3px solid blue;
+                outline:none;
+                box-shadow:0 0 8px rgba(0,0,255,0.6);
+                transition: 0.3s;
+            }
+            .bt1 {
+                
+                margin-top: 15px;
+                height: 40px;
+                border: none;
+                border-radius: 5px;
+                background-color: green;
+                color: white;
+                font-size: 16px;
+                cursor: pointer;
+                width:100%;
+            }
+            .bt1:hover{
+                transform: scale(1.05);
+            }
+            .bt2{
+                margin-top: 15px;
+                height: 40px;
+                border: none;
+                border-radius: 5px;
+                background-color:red;
+                color: white;
+                font-size: 16px;
+                cursor: pointer;
+                width:100%;
+
+            }
+            .bt2:hover{
+                transform: scale(1.05);
+            }
+            .qr{
+                padding: 20px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            @media(max-width:480px){
+                .card1,.card2{
+                    max-width: 90%;
+                }
+            }
+
+        </style>
+
+    </head>
+    <body>
+        <h2 class="head"><center>QR CODE GENERATOR</center></h2>
+        <div class="container">
+            <div class="card1">
+                <div class="horiz">
+                    <label>Enter a URL or Text:</label>
+                    <input type="text" class="input1" id="text"placeholder="Enter URL or Text">
+                    
+                </div>
+                <button type="button" class="bt1" id="button1">Generate QR Code</button>
+                <button type="button" class="bt2" id="button2">Download QR Code</button>
+
+            </div>
+            <div class="card2">
+                <div id="qrcode" class="qr"></div>
+
+            </div>
+        </div>
+        <script>
+            const bt1=document.getElementById("button1");
+            const bt2=document.getElementById("button2");
+            const qrcodeContainer=document.getElementById("qrcode");
+
+
+            function validateInputs(){
+                const text=document.getElementById("text").value;
+                if(text.trim()===""){
+                    alert("Pls Enter a URL or Text!");
+                    return;
+
+                }
+                qrcodeContainer.innerHTML="";
+                 new QRCode(qrcodeContainer,{
+                    text:text,
+                    width:200,
+                    height:200,
+                    colorDark:"#000000",
+                    colorLight:"#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                 });
+            }
+            function downloadQRCode(){
+                const qrcodeDiv=document.getElementById("qrcode");
+                if(!qrcodeDiv.hasChildNodes()){
+                    alert("Please Generate a QR code first!");
+                    return;
+                }
+                html2canvas(qrcodeDiv,{useCORS:true}).then(canvas=>{
+                    const link=document.createElement("a");
+                    link.download="QRCode.png";
+                    link.href=canvas.toDataURL("image/png");
+                    link.click();
+                });
+            }
+            bt1.addEventListener("click", validateInputs);
+            bt2.addEventListener("click",downloadQRCode);
+
+        </script>
+    </body>
+</html>
